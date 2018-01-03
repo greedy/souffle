@@ -9,10 +9,12 @@ dnl $1 -- test case
 dnl $2 -- category
 m4_define([TEST_EVAL_INTERFACE],[
   m4_define([TESTNAME],[$1])
-  m4_define([CATEGORY],[$2])
+  m4_define([KEYWORDS],[$2])
+  m4_define([CATEGORY],[FIRST_WORD([KEYWORDS])])
   m4_define([TESTDIR],["$TESTS"/CATEGORY/TESTNAME])
   m4_define([PROGRAM],[TESTDIR/TESTNAME.dl])
   m4_define([FACTS],[TESTDIR/facts])
+  AT_KEYWORDS([KEYWORDS])
   # invoke souffle
   AT_CHECK(["$SOUFFLE" -D- -o $1 -F FACTS PROGRAM 1>TESTNAME.out 2>TESTNAME.err], [0])
   # remove executable and re-build it from scratch
@@ -27,10 +29,12 @@ dnl $1 -- test case
 dnl $2 -- category
 m4_define([TEST_EVAL_ERROR_INTERFACE],[
   m4_define([TESTNAME],[$1])
-  m4_define([CATEGORY],[$2])
+  m4_define([KEYWORDS],[$2])
+  m4_define([CATEGORY],[FIRST_WORD([KEYWORDS])])
   m4_define([TESTDIR],["$TESTS"/CATEGORY/TESTNAME])
   m4_define([PROGRAM],[TESTDIR/TESTNAME.dl])
   m4_define([FACTS],[TESTDIR/facts])
+  AT_KEYWORDS([KEYWORDS])
   # invoke souffle
   AT_CHECK(["$SOUFFLE" -D- -g $1.cpp -F FACTS PROGRAM 1>TESTNAME.out 2>TESTNAME.err], [0])
   # remove executable and re-build it from scratch
