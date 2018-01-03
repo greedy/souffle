@@ -1172,6 +1172,16 @@ public:
                 out << print(op.getArg(2));
                 out << ")).c_str()))";
                 break;
+            case TernaryOp::SUBST:
+                out << "(RamDomain)symTable.lookup(";
+                out << "(subst_wrapper(symTable.resolve((size_t)";
+                out << print(op.getArg(0));
+                out << "),symTable.resolve((size_t)";
+                out << print(op.getArg(1));
+                out << "),symTable.resolve((size_t)";
+                out << print(op.getArg(2));
+                out << ")).c_str()))";
+                break;
             default:
                 assert(0 && "Unsupported Operation!");
         }
@@ -1327,6 +1337,13 @@ std::string Synthesiser::generateCode(const SymbolTable& symTable, const RamProg
     os << "     std::cerr << str << \"\\\",\" << (int32_t)idx << \",\" << (int32_t)len << \") "
           "functor.\\n\";\n";
     os << "   } return result;\n";
+    os << "}\n";
+    os << "static inline std::string subst_wrapper(const char *pat, const char *repl, const char *text) {\n";
+    os << "   std::string result; \n";
+    os << "   try { result = std::regex_replace(text, std::regex(pat), repl); } catch(...) { \n";
+    os << "     std::cerr << \"warning: wrong pattern provided for subst(\\\"\" << pat << \"\\\",\\\"\" "
+          "<< repl << \"\\\",\\\"\" << text << \"\\\")\\n\";\n}\n";
+    os << "   return result;\n";
     os << "}\n";
 
     if (Global::config().has("profile")) {

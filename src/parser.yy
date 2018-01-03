@@ -100,6 +100,7 @@
 %token EQREL_QUALIFIER           "equivalence relation qualifier"
 %token OVERRIDABLE_QUALIFIER     "relation qualifier overidable"
 %token INLINE_QUALIFIER          "relation qualifier inline"
+%token TSUBST                    "regex substitution"
 %token TMATCH                    "match predicate"
 %token TCONTAINS                 "checks whether substring is contained in a string"
 %token CAT                       "concatenation of two strings"
@@ -616,6 +617,13 @@ arg
     }
   | SUBSTR LPAREN arg COMMA arg COMMA arg RPAREN {
         $$ = new AstTernaryFunctor(TernaryOp::SUBSTR,
+                std::unique_ptr<AstArgument>($3),
+                std::unique_ptr<AstArgument>($5),
+                std::unique_ptr<AstArgument>($7));
+        $$->setSrcLoc(@$);
+    }
+  | TSUBST LPAREN arg COMMA arg COMMA arg RPAREN {
+        $$ = new AstTernaryFunctor(TernaryOp::SUBST,
                 std::unique_ptr<AstArgument>($3),
                 std::unique_ptr<AstArgument>($5),
                 std::unique_ptr<AstArgument>($7));

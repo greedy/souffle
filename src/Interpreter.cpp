@@ -249,6 +249,19 @@ RamDomain eval(const RamValue& value, InterpreterEnvironment& env, const EvalCon
                     }
                     return env.getSymbolTable().lookup(sub_str.c_str());
                 }
+                case TernaryOp::SUBST: {
+                    std::string pattern = env.getSymbolTable().resolve(visit(op.getArg(0)));
+                    std::string replacement = env.getSymbolTable().resolve(visit(op.getArg(1)));
+                    std::string str = env.getSymbolTable().resolve(visit(op.getArg(2)));
+                    std::string result;
+                    try {
+                        result = std::regex_replace(str, std::regex(pattern), replacement);
+                    } catch (...) {
+                        std::cerr << "warning: wrong pattern provided for subst(\"";
+                        std::cerr << pattern << "\",\"" << replacement << "\",\"" << str << "\")\n";
+                    }
+                    return env.getSymbolTable().lookup(result.c_str());
+                }
                 default:
                     assert(0 && "unsupported operator");
                     return 0;

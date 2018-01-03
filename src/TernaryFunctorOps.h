@@ -26,6 +26,7 @@ namespace souffle {
 enum class TernaryOp {
     __UNDEFINED__,  // undefined operator
     SUBSTR,         // addition
+    SUBST,          // regex substitution
 };
 
 /**
@@ -35,6 +36,8 @@ inline std::string getSymbolForTernaryOp(TernaryOp op) {
     switch (op) {
         case TernaryOp::SUBSTR:
             return "substr";
+        case TernaryOp::SUBST:
+            return "subst";
         default:
             break;
     }
@@ -47,6 +50,7 @@ inline std::string getSymbolForTernaryOp(TernaryOp op) {
  */
 inline TernaryOp getTernaryOpForSymbol(const std::string& symbol) {
     if (symbol == "substr") return TernaryOp::SUBSTR;
+    if (symbol == "subst") return TernaryOp::SUBST;
     std::cout << "Unrecognised operator: " << symbol << "\n";
     assert(false && "Unsupported Operator!");
     return TernaryOp::__UNDEFINED__;
@@ -58,6 +62,8 @@ inline TernaryOp getTernaryOpForSymbol(const std::string& symbol) {
 inline bool isNumericTernaryOp(const TernaryOp op) {
     switch (op) {
         case TernaryOp::SUBSTR:
+            return false;
+        case TernaryOp::SUBST:
             return false;
         default:
             break;
@@ -81,6 +87,8 @@ inline bool ternaryOpAcceptsNumbers(int arg, const TernaryOp op) {
     switch (op) {
         case TernaryOp::SUBSTR:
             return arg == 1 || arg == 2;
+        case TernaryOp::SUBST:
+            return false;
         default:
             break;
     }

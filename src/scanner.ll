@@ -95,6 +95,7 @@
 "log"                                 { return yy::parser::make_RESERVED(yytext, yylloc); } // TODO (see issue #298)
 "exp"                                 { return yy::parser::make_RESERVED(yytext, yylloc); } // TODO (see issue #298)
 "match"                               { return yy::parser::make_TMATCH(yylloc); }
+"subst"                               { return yy::parser::make_TSUBST(yylloc); }
 "cat"                                 { return yy::parser::make_CAT(yylloc); }
 "ord"                                 { return yy::parser::make_ORD(yylloc); }
 "strlen"                              { return yy::parser::make_STRLEN(yylloc); }
